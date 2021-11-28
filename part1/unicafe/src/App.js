@@ -52,16 +52,34 @@ const App = () => {
 }
 
 const Statistics = ({ goodRating, neutralRating, badRating, numOfClicks, avg, percentPositive }) => {
+  if (goodRating === 0 && neutralRating === 0 && badRating === 0) {
+    return (
+      <p>No feedback given</p>
+    )
+  }
+
   return (
     <>
       <h2>statistics</h2>
-      <p>good {goodRating}</p>
-      <p>neutral {neutralRating}</p>
-      <p>bad {badRating}</p>
-      <p>all {numOfClicks}</p>
-      <p>average {avg}</p>
-      <p>positive {percentPositive} %</p>
+      <table>
+        <StatisticLine text="good" value={goodRating} />
+        <StatisticLine text="neutral" value={neutralRating} />
+        <StatisticLine text="bad" value={badRating} />
+        <StatisticLine text="all" value={numOfClicks} />
+        <StatisticLine text="average" value={avg} />
+        <StatisticLine text="positive" value={percentPositive} percent="%" />
+      </table>
     </>
+  )
+}
+
+const StatisticLine = ({ text, value, percent = "" }) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+      <td>{percent}</td>
+    </tr>
   )
 }
 

@@ -3,12 +3,16 @@ import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
 import phoneService from './services/phonebook'
+import Notification from './Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [message, setMessage] = useState("")
+  const [notificationClass, setNotificationClass] = useState("")
 
   useEffect(() => {
     phoneService
@@ -48,15 +52,34 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewPhone("")
+          setNotificationClass("message")
+          setMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 1000)
         })
     } else {
       const person = persons.find(person => person["name"] === newName)
       const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
       if (result) {
         phoneService.update(person.id, newPerson)
-        setPersons(persons.map(updatedPerson => updatedPerson.id === person.id ? newPerson : updatedPerson))
-        setNewName("")
-        setNewPhone("")
+          .then(returnedPerson => {
+            setPersons(persons.map(updatedPerson => updatedPerson.id === person.id ? newPerson : updatedPerson))
+            setNewName("")
+            setNewPhone("")
+            setMessage(`Updated ${person.name}'s phone number`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 1000)
+          })
+          .catch(error => {
+            setMessage(`Information of ${person.name} has already been removed from server`)
+            setNotificationClass("error")
+            setPersons(persons.filter(personExisting => personExisting.id !== person.id))
+            setTimeout(() => {
+              setMessage(null)
+            }, 2000)
+          })
       }
     }
   }
@@ -66,6 +89,13 @@ const App = () => {
     const result = window.confirm(`Delete ${person.name} ?`)
     if (result) {
       phoneService.deletePerson(id)
+        .catch(error => {
+          // setMessage(`Information of ${person.name} has already been removed from server`)
+          setNotificationClass("error")
+          setTimeout(() => {
+            setMessage(null)
+          }, 2000)
+        })
       setPersons(persons.filter(person => person.id !== id))
     }
   }
@@ -73,6 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {message && <Notification message={message} notificationClass={notificationClass} />}
       <Filter filterName={filterName} handleFilterInput={handleFilterInput} />
       <h2>Add a new</h2>
       <PersonForm

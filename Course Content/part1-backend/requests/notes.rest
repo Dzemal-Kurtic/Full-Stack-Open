@@ -1,10 +1,10 @@
 // GET All notes
-GET http://localhost:3001/capi/notes
+GET http://localhost:3001/api/notes
 
 ###
 
 // GET a note
-GET http://localhost:3001/api/notes/1
+GET http://localhost:3001/api/notes/6aeb7f299c998cf70089204c
 
 ###
 

@@ -1,0 +1,32 @@
+import mongoose from "mongoose"
+import dns from "node:dns"
+
+dns.setServers(["1.1.1.1", "8.8.8.8"])
+mongoose.set("strictQuery", false)
+
+const url = process.env.MONGODB_URI
+console.log(`connecting to ${url}`)
+
+mongoose
+  .connect(url, { family: 4 })
+  .then((res) => {
+    console.log("connected to MongoDB")
+  })
+  .catch((error) => {
+    console.log(`error connecting to MongoDB: ${error.message}`)
+  })
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+noteSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  },
+})
+
+export default mongoose.model("Note", noteSchema)

@@ -1,15 +1,15 @@
-// GET all persons
-GET http://localhost:3001/api/persons
-
-###
-
 // GET info
 GET http://localhost:3001/info 
 
 ###
 
+// GET all persons
+GET http://localhost:3001/api/persons
+
+###
+
 // GET a person
-GET http://localhost:3001/api/persons/1
+GET http://localhost:3001/api/persons/6aeb8598c2f739d0f927a955
 
 ###
 
@@ -18,7 +18,7 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Jemo Kurtich",
+    "name": "Bajruzin Kurtić",
     "number": "0123455678"
 }
 

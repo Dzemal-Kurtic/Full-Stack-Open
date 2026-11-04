@@ -1,0 +1,28 @@
+// GET all persons
+GET http://localhost:3001/api/persons
+
+###
+
+// GET info
+GET http://localhost:3001/info 
+
+###
+
+// GET a person
+GET http://localhost:3001/api/persons/1
+
+###
+
+// POST a person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Jemo Kurtich",
+    "number": "0123455678"
+}
+
+###
+
+// DELETE a person
+DELETE http://localhost:3001/api/persons/4

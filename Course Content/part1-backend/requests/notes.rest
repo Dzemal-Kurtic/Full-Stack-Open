@@ -1,0 +1,25 @@
+// GET All notes
+GET http://localhost:3001/capi/notes
+
+###
+
+// GET a note
+GET http://localhost:3001/api/notes/1
+
+###
+
+// POST a note
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "VS Code is also good in testing backend",
+    "important": true
+}
+
+###
+
+// DELETE a note
+DELETE http://localhost:3001/api/notes/1
+
+###

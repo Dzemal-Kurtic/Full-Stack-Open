@@ -17,22 +17,22 @@
     },
     {
       "content": "Brah",
-      "important": false,
+      "important": true,
       "id": "Taliz5bw9CA"
     },
     {
       "content": "Brah",
-      "important": false,
+      "important": true,
       "id": "X6l1EHV7U8w"
     },
     {
       "content": "Jemo",
-      "important": true,
+      "important": false,
       "id": "KHm4QdsqFho"
     },
     {
       "content": "Bajdkjsadj",
-      "important": false,
+      "important": true,
       "id": "b0lEGrfCDEM"
     }
   ],

@@ -1,5 +1,5 @@
 // GET info
-GET http://localhost:3001/info 
+GET http://localhost:3001/api/persons/info 
 
 ###
 
@@ -27,10 +27,10 @@ PUT http://localhost:3001/api/persons/6aeb8598c2f739d0f927a955
 Content-Type:  application/json
 
 {
-    "number": "43"
+    "number": "4asda3"
 }
 
 ###
 
 // DELETE a person
-DELETE http://localhost:3001/api/persons/6aec4a1987153c272e815ffa
+DELETE http://localhost:3001/api/persons/6aec93c4aa592cbcdfd213c9

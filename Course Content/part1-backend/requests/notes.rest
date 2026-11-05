@@ -1,4 +1,4 @@
-// GET All notes
+// GET all notes
 GET http://localhost:3001/api/notes
 
 ###

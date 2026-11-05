@@ -1,0 +1,15 @@
+// GET all blog
+GET http://localhost:3003/api/blogs
+
+###
+
+// POST a blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "How to learn bro bro",
+    "author": "Tabaqerie",
+    "url": "http",
+    "likes": 3
+}

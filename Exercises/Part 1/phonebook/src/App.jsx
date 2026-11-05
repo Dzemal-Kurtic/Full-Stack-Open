@@ -46,9 +46,17 @@ const App = () => {
             }, 4000)
           })
           .catch((error) => {
-            setErrorMessage(
-              `Information of ${newPerson.name} has already been removed from server`,
-            )
+            if (error.response.status === 404) {
+              setErrorMessage(
+                `Information of ${newPerson.name} has already been removed from server`,
+              )
+              setPersons(persons.filter((p) => p.id !== newPerson.id))
+            } else {
+              setErrorMessage(error.response.data.error)
+            }
+            // setErrorMessage(
+            //   `Information of ${newPerson.name} has already been removed from server`,
+            // )
             setTimeout(() => {
               setErrorMessage(null)
             }, 4000)
@@ -61,15 +69,23 @@ const App = () => {
       number: newNumber,
     }
 
-    personServices.create(newPerson).then((person) => {
-      setPersons(persons.concat(person))
-      setNewName("")
-      setNewNumber("")
-      setSuccessMessage(`Added ${person.name}`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 4000)
-    })
+    personServices
+      .create(newPerson)
+      .then((person) => {
+        setPersons(persons.concat(person))
+        setNewName("")
+        setNewNumber("")
+        setSuccessMessage(`Added ${person.name}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 4000)
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 4000)
+      })
   }
 
   const handleNameChange = (event) => {

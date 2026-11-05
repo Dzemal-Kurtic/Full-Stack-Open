@@ -36,10 +36,6 @@ app.get("/api/notes/:id", (req, res, next) => {
 app.post("/api/notes", (req, res, next) => {
   const body = req.body
 
-  if (!body.content) {
-    return res.status(400).json({ error: "content missing" })
-  }
-
   const note = new Note({
     content: body.content,
     important: body.important || false,
@@ -48,7 +44,7 @@ app.post("/api/notes", (req, res, next) => {
   note
     .save()
     .then((savedNote) => {
-      response.json(savedNote)
+      res.json(savedNote)
     })
     .catch((error) => next(error))
 })
@@ -72,7 +68,7 @@ app.put("/api/notes/:id", (req, res, next) => {
 
 app.delete("/api/notes/:id", (req, res, next) => {
   Note.findByIdAndDelete(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end()
     })
     .catch((error) => next(error))

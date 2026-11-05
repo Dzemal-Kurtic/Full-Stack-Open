@@ -40,12 +40,6 @@ app.get("/api/persons/:id", (req, res, next) => {
 app.post("/api/persons", (req, res, next) => {
   const body = req.body
 
-  if (!body.name) {
-    return res.status(400).json({ error: "name must be present" })
-  }
-  if (!body.number) {
-    return res.status(400).json({ error: "number must be present" })
-  }
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -77,7 +71,7 @@ app.put("/api/persons/:id", (req, res, next) => {
 
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then((person) => {
+    .then(() => {
       res.status(204).end()
     })
     .catch((error) => next(error))
@@ -90,6 +84,8 @@ const unknownEndpoint = (req, res) => {
 const errorHandler = (error, req, res, next) => {
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" })
+  } else if (error.name === "ValidationError") {
+    return res.status(400).send({ error: error.message })
   }
   next(error)
 }

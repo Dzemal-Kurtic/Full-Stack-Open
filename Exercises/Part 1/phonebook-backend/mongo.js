@@ -8,8 +8,6 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-const password = process.argv[2]
-
 const url = process.env.MONGODB_URI
 
 mongoose.set("strictQuery", false)

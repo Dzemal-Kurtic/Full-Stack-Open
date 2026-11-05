@@ -18,11 +18,19 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Bajruzin Kurtić",
-    "number": "0123455678"
+    "name": "Senada Kurtić",
+    "number": "2"
+}
+
+### PUT a person's number
+PUT http://localhost:3001/api/persons/6aeb8598c2f739d0f927a955
+Content-Type:  application/json
+
+{
+    "number": "43"
 }
 
 ###
 
 // DELETE a person
-DELETE http://localhost:3001/api/persons/4
+DELETE http://localhost:3001/api/persons/6aec4a1987153c272e815ffa

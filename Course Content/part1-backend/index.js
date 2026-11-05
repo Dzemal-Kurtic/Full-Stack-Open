@@ -2,8 +2,6 @@ import "dotenv/config"
 import express from "express"
 import Note from "./models/note.js"
 
-let notes = []
-
 const requestLogger = (req, res, next) => {
   console.log(`Method ${req.method}`)
   console.log(`Path   ${req.path}`)
@@ -69,7 +67,7 @@ app.put("/api/notes/:id", (req, res, next) => {
     .catch((error) => next(error))
 })
 
-app.delete("/api/notes/:id", (req, res) => {
+app.delete("/api/notes/:id", (req, res, next) => {
   Note.findByIdAndDelete(req.params.id)
     .then((result) => {
       res.status(204).end()

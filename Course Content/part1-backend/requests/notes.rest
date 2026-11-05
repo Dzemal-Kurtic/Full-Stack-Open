@@ -13,7 +13,7 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "VS Code is also good in testing backend",
+    "content": "lol",
     "important": true
 }
 

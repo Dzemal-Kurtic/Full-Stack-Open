@@ -3,13 +3,36 @@ GET http://localhost:3003/api/blogs
 
 ###
 
+// Get a blog
+GET http://localhost:3003/api/blogs/6aef77a7c24ad2faf9f34e56
+
+###
+
+// UPDATE a blog
+PUT http://localhost:3003/api/blogs/6aef77a7c24ad2faf9f34e56
+Content-Type: application/json
+
+{
+    "title": "How to learn bro bro again1",
+    "author": "Tabaqerie again",
+    "url": "http again",
+    "likes": 3
+}
+
+###
+
 // POST a blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "How to learn bro bro",
+    "title": "Where to go",
     "author": "Tabaqerie",
     "url": "http",
     "likes": 3
 }
+
+###
+
+// Delete a person
+DELETE http://localhost:3003/api/blogs/6aef791959338b876594d187

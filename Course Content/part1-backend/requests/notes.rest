@@ -13,13 +13,23 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "lol",
+    "content": "lol lol",
+    "important": true
+}
+
+###
+// UPDATE a note
+PUT http://localhost:3001/api/notes/6aeb7f299c998cf70089204c
+Content-Type: application/json
+
+{
+    "content" :"Easy Peasy",
     "important": true
 }
 
 ###
 
 // DELETE a note
-DELETE http://localhost:3001/api/notes/1
+DELETE http://localhost:3001/api/notes/6aef84a9b1009c2ebc6d5942
 
 ###

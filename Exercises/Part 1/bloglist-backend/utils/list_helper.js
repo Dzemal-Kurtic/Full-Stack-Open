@@ -1,4 +1,4 @@
-const dummy = (blogs) => {
+const dummy = () => {
   return 1
 }
 
@@ -18,7 +18,6 @@ const favoriteBlog = (blogs) => {
       mostLikes = blogs[i].likes
     }
   }
-  console.log(blogMostLikes)
   return blogMostLikes
 }
 

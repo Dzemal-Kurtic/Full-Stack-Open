@@ -4,11 +4,12 @@ import config from "./utils/config.js"
 import logger from "./utils/logger.js"
 import middleware from "./utils/middleware.js"
 import notesRouter from "./controllers/notes.js"
+import usersRouter from "./controllers/users.js"
 import dns from "node:dns"
 
 const app = express()
 
-logger.info("connecting to", config.MONGODB_URI)
+logger.info("connecting to MongoDB")
 
 dns.setServers(["1.1.1.1", "8.8.8.8"])
 
@@ -26,6 +27,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use("/api/notes", notesRouter)
+app.use("/api/users", usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

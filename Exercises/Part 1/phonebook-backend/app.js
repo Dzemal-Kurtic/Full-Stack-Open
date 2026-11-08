@@ -9,7 +9,7 @@ import morgan from "morgan"
 
 const app = express()
 
-logger.info("connecting to", config.MONGODB_URI)
+logger.info("connecting to MongoDB")
 
 dns.setServers(["1.1.1.1", "8.8.8.8"])
 

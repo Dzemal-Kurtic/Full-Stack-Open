@@ -4,7 +4,7 @@ GET http://localhost:3003/api/blogs
 ###
 
 // Get a blog
-GET http://localhost:3003/api/blogs/6aef77a7c24ad2faf9f34e56
+GET http://localhost:3003/api/blogs/6af1f8a521a8d80466d717d3
 
 ###
 
@@ -16,7 +16,7 @@ Content-Type: application/json
     "title": "How to learn bro bro again1",
     "author": "Tabaqerie again",
     "url": "http again",
-    "likes": 3
+    "likes": 3,
 }
 
 ###
@@ -26,10 +26,11 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Where to go",
+    "title": "Once again same user6",
     "author": "Tabaqerie",
     "url": "http",
-    "likes": 3
+    "likes": 3,
+    "userId":"6af1fcfcdf46d6024ccd36e5"
 }
 
 ###

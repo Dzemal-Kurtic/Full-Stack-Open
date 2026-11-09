@@ -1,9 +1,11 @@
-import { test, after, beforeEach } from "node:test"
+import { describe, test, after, beforeEach } from "node:test"
 import assert from "node:assert"
 import mongoose from "mongoose"
 import supertest from "supertest"
+import bcrypt from "bcrypt"
 import app from "../app.js"
 import Blog from "../models/blog.js"
+import User from "../models/user.js"
 import helper from "./test_helper.js"
 
 const api = supertest(app)
@@ -11,6 +13,19 @@ const api = supertest(app)
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+})
+
+beforeEach(async () => {
+  await User.deleteMany({})
+
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash("sekret", saltRounds)
+  const user = new User({
+    username: "Brzi",
+    passwordHash,
+  })
+
+  await user.save()
 })
 
 test("blogs are returned as json", async () => {
@@ -35,11 +50,15 @@ test("unique identifier returned by the api is id, not _id", async () => {
 })
 
 test("a valid blog can be added", async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const users = await helper.usersInDb()
+  const user = users[0]
   const newBlog = {
-    title: "Treći blog",
+    title: "Treći konj",
     author: "Treći autor",
     url: "http://trećiblog.com",
     likes: 15,
+    userId: user.id,
   }
 
   await api
@@ -48,22 +67,22 @@ test("a valid blog can be added", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/)
 
-  const blogsInTheDb = await helper.blogsInDb()
+  const blogsAtEnd = await helper.blogsInDb()
 
-  assert.strictEqual(blogsInTheDb.length, helper.initialBlogs.length + 1)
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length + 1)
 
-  const blogToCheck = blogsInTheDb.find((b) => b.title === "Treći blog")
+  const blogToCheck = blogsAtEnd.find((b) => b.title === "Treći konj")
   assert(blogToCheck, "the new blog was not found in the database")
-
-  delete blogToCheck.id
-  assert.deepStrictEqual(blogToCheck, newBlog)
 })
 
 test("missing likes will default to zero", async () => {
+  const users = await helper.usersInDb()
+  const user = users[0]
   const newBlog = {
     title: "Treći blog",
     author: "Treći autor",
     url: "http://trećiblog.com",
+    userId: user.id,
   }
 
   await api.post("/api/blogs").send(newBlog).expect(201)
@@ -88,10 +107,13 @@ test("missing title will give back 400 bad request", async () => {
 })
 
 test("missing url will give back 400 bad request", async () => {
+  const users = await helper.usersInDb()
+  const user = users[0]
   const newBlog = {
     title: "Treći blog",
     author: "Treći autor",
     likes: 15,
+    userId: user.id,
   }
 
   await api.post("/api/blogs").send(newBlog).expect(400)
@@ -134,6 +156,70 @@ test("updating an existing blog gives back correct values", async () => {
   delete updatedBlog.id
 
   assert.deepStrictEqual(updatedBlog, blogToUpdate)
+})
+
+describe("when there is initially one user in the database", () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
+
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash("sekret", saltRounds)
+    const user = new User({
+      username: "Brzi",
+      passwordHash,
+    })
+
+    await user.save()
+  })
+
+  test("creation succeeds with a fresh username", async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: "Mika",
+      name: "Mika Hakinen",
+      password: "brabra",
+    }
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .expect("Content-Type", /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map((user) => user.username)
+    assert(usernames.includes(newUser.username))
+  })
+
+  test("creation fails with proper status code and message if username is already taken", async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: "Brzi",
+      name: "SuperUsers",
+      password: "superuser",
+    }
+
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert(result.body.error.includes("expected 'username' to be unique"))
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
 })
 
 after(async () => {

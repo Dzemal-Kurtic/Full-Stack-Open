@@ -16,6 +16,19 @@ describe("when there is initially some notes saved", () => {
     await Note.insertMany(helper.initialNotes)
   })
 
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash("sekret", saltRounds)
+    const user = new User({
+      username: "root",
+      passwordHash,
+    })
+
+    await user.save()
+  })
+
   test("notes are returned as json", async () => {
     await api
       .get("/api/notes")
@@ -64,9 +77,13 @@ describe("when there is initially some notes saved", () => {
 
   describe("addition of a new note", () => {
     test("succeeds with valid data", async () => {
+      const users = await helper.usersInDb()
+      const user = users[0]
+
       const newNote = {
         content: "async/await simplifies making async calls",
         important: true,
+        userId: user.id,
       }
 
       await api
@@ -83,7 +100,9 @@ describe("when there is initially some notes saved", () => {
     })
 
     test("fails with status code 400 if data invalid", async () => {
-      const newNote = { important: true }
+      const users = await helper.usersInDb()
+      const user = users[0]
+      const newNote = { important: true, userId: user.id }
 
       await api.post("/api/notes").send(newNote).expect(400)
 
@@ -136,6 +155,11 @@ describe("when there is initially some notes saved", () => {
 
 describe("when there is initially one user in the db", () => {
   beforeEach(async () => {
+    await Note.deleteMany({})
+    await Note.insertMany(helper.initialNotes)
+  })
+
+  beforeEach(async () => {
     await User.deleteMany({})
 
     const saltRounds = 10
@@ -186,8 +210,8 @@ describe("when there is initially one user in the db", () => {
       .expect("Content-Type", /application\/json/)
 
     const usersAtEnd = await helper.usersInDb()
-    assert(result.body.error.includes("expected 'username' to be unique"))
 
+    assert(result.body.error.includes("expected 'username' to be unique"))
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 })

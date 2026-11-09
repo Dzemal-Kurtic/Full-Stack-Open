@@ -3,7 +3,7 @@ GET http://localhost:3001/api/users
 
 ###
 
-// POST a user
+// POST an user
 POST http://localhost:3001/api/users
 Content-Type: application/json
 

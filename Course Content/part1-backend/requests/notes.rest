@@ -11,9 +11,10 @@ GET http://localhost:3001/api/notes/6aeb7f299c998cf70089204c
 // POST a note
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjZhZjBkMGI0NzA2YTQ1Mjc4ODBmMmM1MSIsImlhdCI6MTc5NDI1NjM0Nn0.NvMvaHsgBTEpIUnq63dm-vI24ZhVkZdQZ4TxwFFgQzY
 
 {
-    "content": "again id is importante",
+    "content": "Is there a token now2",
     "important": true,
     "userId": "6af0d0b4706a4527880f2c51"
 }

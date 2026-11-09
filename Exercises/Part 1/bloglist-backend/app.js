@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import dns from "node:dns"
 import blogsRouter from "./controllers/blogs.js"
 import usersRouter from "./controllers/users.js"
+import loginRouter from "./controllers/login.js"
 import middleware from "./utils/middleware.js"
 import config from "./utils/config.js"
 
@@ -14,6 +15,7 @@ mongoose.connect(config.MONGODB_URI, { family: 4 })
 
 app.use(express.json())
 
+app.use("/api/login", loginRouter)
 app.use("/api/blogs", blogsRouter)
 app.use("/api/users", usersRouter)
 

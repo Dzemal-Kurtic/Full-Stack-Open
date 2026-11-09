@@ -1,18 +1,31 @@
 import Blog from "../models/blog.js"
 import User from "../models/user.js"
 
-const initialBlogs = [
+const initialUsers = [
   {
-    title: "Prvi blog",
-    author: "Prvi autor",
-    url: "http://prviblog.com",
-    likes: 5,
+    username: "Username 1",
+    name: "Name 1",
+    password: "sekret",
   },
   {
-    title: "Drugi blog",
-    author: "Drugi autor",
-    url: "http://drugiblog.com",
-    likes: 10,
+    username: "Username 2",
+    name: "Name 2",
+    password: "sekret",
+  },
+]
+
+const initialBlogs = [
+  {
+    title: "Blog 1",
+    author: "Author 1",
+    url: "http://blog1.com",
+    likes: 1,
+  },
+  {
+    title: "Blog 2",
+    author: "Author 2",
+    url: "http://blog2.com",
+    likes: 2,
   },
 ]
 
@@ -26,4 +39,4 @@ const usersInDb = async () => {
   return users.map((user) => user.toJSON())
 }
 
-export default { initialBlogs, blogsInDb, usersInDb }
+export default { initialUsers, initialBlogs, blogsInDb, usersInDb }

@@ -5,6 +5,7 @@ import logger from "./utils/logger.js"
 import middleware from "./utils/middleware.js"
 import notesRouter from "./controllers/notes.js"
 import usersRouter from "./controllers/users.js"
+import loginRouter from "./controllers/login.js"
 import dns from "node:dns"
 
 const app = express()
@@ -26,6 +27,7 @@ app.use(express.static("dist"))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
+app.use("/api/login", loginRouter)
 app.use("/api/notes", notesRouter)
 app.use("/api/users", usersRouter)
 

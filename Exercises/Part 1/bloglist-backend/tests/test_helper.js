@@ -31,12 +31,12 @@ const initialBlogs = [
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
-  return blogs.map((blog) => blog.toJSON())
+  return JSON.parse(JSON.stringify(blogs))
 }
 
 const usersInDb = async () => {
   const users = await User.find({})
-  return users.map((user) => user.toJSON())
+  return JSON.parse(JSON.stringify(users))
 }
 
 export default { initialUsers, initialBlogs, blogsInDb, usersInDb }

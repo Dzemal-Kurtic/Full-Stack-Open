@@ -41,6 +41,7 @@ blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
 
 blogsRouter.put("/:id", middleware.userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
+  console.log("req", request.body)
 
   const blog = await Blog.findById(request.params.id)
   if (!blog) {

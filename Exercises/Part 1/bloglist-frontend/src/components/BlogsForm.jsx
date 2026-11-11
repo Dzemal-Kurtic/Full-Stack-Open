@@ -1,8 +1,23 @@
-const BlogsForm = ({ handleBlogCreate }) => {
+import { useState } from "react"
+
+const BlogsForm = ({ createBlog }) => {
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
+
+  const handleBlogCreate = (event) => {
+    event.preventDefault()
+
+    createBlog({ title, author, url })
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+  }
+
   return (
     <form onSubmit={handleBlogCreate}>
       <div>
-        <h3>create new</h3>
+        <h3>Create new blog</h3>
         <div>
           <label>
             title
@@ -34,7 +49,7 @@ const BlogsForm = ({ handleBlogCreate }) => {
           </label>
         </div>
       </div>
-      <button type="submit">Create a blog</button>
+      <button type="submit">Save</button>
     </form>
   )
 }

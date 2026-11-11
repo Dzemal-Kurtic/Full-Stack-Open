@@ -9,14 +9,15 @@ GET http://localhost:3003/api/blogs/6af1f8a521a8d80466d717d3
 ###
 
 // UPDATE a blog
-PUT http://localhost:3003/api/blogs/6aef77a7c24ad2faf9f34e56
+PUT http://localhost:3003/api/blogs/6af34aa35a2691580cd9b907
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbWFsIiwiaWQiOiI2YWYzMzg2ODNiOWI0ODEzYmU4ZDY4N2IiLCJpYXQiOjE3OTQ0MTUzODMsImV4cCI6MTc5NDQxODk4M30.Jblufkr7YBLKX5_RBb3w_BGvet8EPFqSWfT5uSQfTPU
 Content-Type: application/json
 
 {
-    "title": "How to learn bro bro again1",
-    "author": "Tabaqerie again",
-    "url": "http again",
-    "likes": 3,
+    "title": "First title",
+    "author": "First author",
+    "url": "https://first-title.com",
+    "likes": 3
 }
 
 ###

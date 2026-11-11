@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import Blog from "./components/Blog"
 import Notification from "./components/Notification"
+import BlogsForm from "./components/BlogsForm"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 
@@ -157,7 +158,6 @@ const App = () => {
 
   return (
     <div>
-      {/* {!user && loginForm()} */}
       {!user && (
         <div>
           <h2>login</h2>
@@ -172,6 +172,7 @@ const App = () => {
           </p>
           {blogsForm()}
           {blogsList()}
+          <BlogsForm handleBlogCreate={handleBlogCreate} />
         </div>
       )}
       <Notification message={errorMessage} type={"error"} />

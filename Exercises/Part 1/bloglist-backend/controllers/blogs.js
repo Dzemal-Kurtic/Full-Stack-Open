@@ -1,14 +1,6 @@
 import express from "express"
-import jwt from "jsonwebtoken"
 import Blog from "../models/blog.js"
-import User from "../models/user.js"
-
-const getTokenFrom = (request) => {
-  const authorization = request.get("Authorization")
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "")
-  }
-}
+import middleware from "../utils/middleware.js"
 
 const blogsRouter = express.Router()
 
@@ -25,21 +17,13 @@ blogsRouter.get("/:id", async (request, response) => {
   if (blog) {
     response.json(blog)
   } else {
-    return response.status(404).end()
+    return response.status(404).json({ error: "blog not found" })
   }
 })
 
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" })
-  }
-
-  const user = await User.findById(decodedToken.id)
-  if (!user) {
-    return response.status(401).json({ error: "user not found" })
-  }
+  const user = request.user
 
   const blog = new Blog({
     title: body.title,
@@ -55,20 +39,15 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", middleware.userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
-
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" })
-  }
 
   const blog = await Blog.findById(request.params.id)
   if (!blog) {
-    return response.status(404).end()
+    return response.status(404).json({ error: "blog not found" })
   }
 
-  if (blog.user?.toString() !== decodedToken.id) {
+  if (blog.user?.toString() !== request.user.id) {
     return response
       .status(403)
       .json({ error: "only the creator can update this blog" })
@@ -83,30 +62,29 @@ blogsRouter.put("/:id", async (request, response) => {
   response.json(updatedBlog)
 })
 
-blogsRouter.delete("/:id", async (request, response) => {
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" })
-  }
+blogsRouter.delete(
+  "/:id",
+  middleware.userExtractor,
+  async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+      return response.status(404).json({ error: "blog not found" })
+    }
 
-  const blog = await Blog.findById(request.params.id)
-  if (!blog) {
-    return response.status(404).end()
-  }
+    const user = request.user
+    if (blog.user?.toString() !== user.id) {
+      return response
+        .status(403)
+        .json({ error: "only the creator can delete this blog" })
+    }
 
-  if (blog.user?.toString() !== decodedToken.id) {
-    return response
-      .status(403)
-      .json({ error: "only the creator can delete this blog" })
-  }
+    await blog.deleteOne()
 
-  await blog.deleteOne()
+    user.blogs = user.blogs.filter((id) => !id.equals(blog._id))
+    await user.save()
 
-  const user = await User.findById(decodedToken.id)
-  user.blogs = user.blogs.filter((id) => !id.equals(blog._id))
-  await user.save()
-
-  response.status(204).end()
-})
+    response.status(204).end()
+  },
+)
 
 export default blogsRouter

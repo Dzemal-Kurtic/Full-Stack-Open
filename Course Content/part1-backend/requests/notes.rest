@@ -11,12 +11,12 @@ GET http://localhost:3001/api/notes/6aeb7f299c998cf70089204c
 // POST a note
 POST http://localhost:3001/api/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjZhZjBkMGI0NzA2YTQ1Mjc4ODBmMmM1MSIsImlhdCI6MTc5NDI1NjM0Nn0.NvMvaHsgBTEpIUnq63dm-vI24ZhVkZdQZ4TxwFFgQzY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIgMSIsImlkIjoiNmFmMmRjOWU0NjJkYjY0ZTJkY2MxNGE1IiwiaWF0IjoxNzk0MzAxODM4LCJleHAiOjE3OTQzMDU0Mzh9.wXOcBZI70VROWBIVWdoHaxYoiCbfYCilk_ogyhSqqLc
 
 {
-    "content": "Is there a token now2",
-    "important": true,
-    "userId": "6af0d0b4706a4527880f2c51"
+    "content": "Content 2",
+    "important": false,
+    "userId": "6af2dc9e462db64e2dcc14a5"
 }
 
 ###

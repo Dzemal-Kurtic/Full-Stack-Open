@@ -24,7 +24,7 @@ Content-Type: application/json
 // POST a blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbWFsIiwiaWQiOiI2YWYyMzk0YTQ0ZmNlZWZlOWY4ODQwMjciLCJpYXQiOjE3OTQyNTkyODgsImV4cCI6MTc5NDI2Mjg4OH0.R3iDlW6F3LAmMhL6bw3a_R7PpYQ8XQEtHOnj5hcYC9M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbWFsIiwiaWQiOiI2YWYzMjVjYjg1MjM1MDFkMTM2YjI4YmUiLCJpYXQiOjE3OTQzMTk4MzYsImV4cCI6MTc5NDMyMzQzNn0._UGQd2KS-Mj5pYEuIFBRSQD9LcNVKgnAhy67XJQXXLU
 
 {
     "title": "Prvi blog",

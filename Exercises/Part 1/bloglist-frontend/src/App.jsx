@@ -62,21 +62,14 @@ const App = () => {
 
   const handleLike = async ({ title, author, url, likes, id }) => {
     try {
-      console.log(title)
-      console.log(author)
-      console.log(url)
-      console.log(likes)
-      console.log(id)
       const newBlog = {
         title,
         author,
         url,
         likes,
       }
-      console.log("newblog", newBlog)
       const blog = await blogService.update(id, newBlog)
-      console.log("returned ", blog)
-      setBlogs((b) => (b.id !== blog.id ? b : blog))
+      setBlogs((blogs) => blogs.map((b) => (b.id === blog.id ? blog : b)))
       setSuccessMessage(`Blog '${blog.title}' updated`)
       setTimeout(() => {
         setSuccessMessage(null)

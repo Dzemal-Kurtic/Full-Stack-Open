@@ -2,9 +2,8 @@ import { useState } from "react"
 
 const Blog = ({ blog, updateBlog }) => {
   const [showAll, setShowALl] = useState(false)
-  // console.log(blog)
 
-  let { title, author, url, likes, user, id } = blog
+  let { title, author, url, likes, id, user } = blog
 
   const blogStyle = {
     paddingTop: 10,

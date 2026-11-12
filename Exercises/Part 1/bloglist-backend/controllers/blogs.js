@@ -41,14 +41,17 @@ blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
 
 blogsRouter.put("/:id", middleware.userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
-  console.log("req", request.body)
 
-  const blog = await Blog.findById(request.params.id)
+  const blog = await Blog.findById(request.params.id).populate("user", {
+    username: 1,
+    name: 1,
+    id: 1,
+  })
   if (!blog) {
     return response.status(404).json({ error: "blog not found" })
   }
 
-  if (blog.user?.toString() !== request.user.id) {
+  if (blog.user?.id.toString() !== request.user.id) {
     return response
       .status(403)
       .json({ error: "only the creator can update this blog" })

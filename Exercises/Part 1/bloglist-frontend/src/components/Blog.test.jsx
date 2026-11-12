@@ -46,7 +46,7 @@ describe("<Blog />", () => {
   })
 })
 
-test("", async () => {
+test("clicking the like button calls the event handler once", async () => {
   const blog = {
     title: "Test title",
     author: "Test author",

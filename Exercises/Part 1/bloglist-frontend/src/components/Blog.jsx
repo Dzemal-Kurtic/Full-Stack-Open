@@ -2,7 +2,6 @@ import { useState } from "react"
 
 const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [showAll, setShowALl] = useState(false)
-  console.log("whole  ", blog)
 
   let { title, author, url, likes, id, user } = blog
 

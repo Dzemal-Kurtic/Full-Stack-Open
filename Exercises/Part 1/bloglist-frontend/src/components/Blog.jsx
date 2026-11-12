@@ -1,7 +1,8 @@
 import { useState } from "react"
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [showAll, setShowALl] = useState(false)
+  console.log("whole  ", blog)
 
   let { title, author, url, likes, id, user } = blog
 
@@ -20,6 +21,10 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog({ title, author, url, likes, id })
   }
 
+  const handleDelete = () => {
+    deleteBlog(id)
+  }
+
   if (showAll) {
     return (
       <div style={blogStyle}>
@@ -34,6 +39,7 @@ const Blog = ({ blog, updateBlog }) => {
           <button onClick={handleLike}>Like</button>
         </div>
         <div>{user.name}</div>
+        <button onClick={handleDelete}>Remove</button>
       </div>
     )
   }

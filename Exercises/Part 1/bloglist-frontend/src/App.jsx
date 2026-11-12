@@ -69,6 +69,7 @@ const App = () => {
         likes,
       }
       const blog = await blogService.update(id, newBlog)
+      console.log("bloggg  ", blog)
       setBlogs((blogs) => blogs.map((b) => (b.id === blog.id ? blog : b)))
       setSuccessMessage(`Blog '${blog.title}' updated`)
       setTimeout(() => {
@@ -76,6 +77,24 @@ const App = () => {
       }, 2000)
     } catch {
       setErrorMessage("can't update blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 2000)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await blogService.remove(id)
+      console.log(blogs)
+      setBlogs((blogs) => blogs.filter((b) => b.id !== id))
+      console.log(blogs)
+      setSuccessMessage(`Blog deleted`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 2000)
+    } catch {
+      setErrorMessage("can't delete blog")
       setTimeout(() => {
         setErrorMessage(null)
       }, 2000)
@@ -102,7 +121,12 @@ const App = () => {
   const blogsList = () => (
     <div>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={handleLike} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateBlog={handleLike}
+          deleteBlog={handleDelete}
+        />
       ))}
     </div>
   )

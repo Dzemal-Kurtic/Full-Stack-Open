@@ -35,7 +35,8 @@ blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
 
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
+  const savedUser = await user.save()
+  savedBlog.user = savedUser
   response.status(201).json(savedBlog)
 })
 
@@ -51,11 +52,11 @@ blogsRouter.put("/:id", middleware.userExtractor, async (request, response) => {
     return response.status(404).json({ error: "blog not found" })
   }
 
-  if (blog.user?.id.toString() !== request.user.id) {
-    return response
-      .status(403)
-      .json({ error: "only the creator can update this blog" })
-  }
+  // if (blog.user?.id.toString() !== request.user.id) {
+  //   return response
+  //     .status(403)
+  //     .json({ error: "only the creator can update this blog" })
+  // }
 
   blog.title = title
   blog.author = author

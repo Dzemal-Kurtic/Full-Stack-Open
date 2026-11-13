@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { TextField, Button } from "@mui/material"
 
 const BlogsForm = ({ createBlog }) => {
   const [title, setTitle] = useState("")
@@ -15,42 +16,74 @@ const BlogsForm = ({ createBlog }) => {
   }
 
   return (
-    <form onSubmit={handleBlogCreate}>
-      <div>
-        <h3>Create new blog</h3>
+    <>
+      <h3>Create new blog</h3>
+      <form onSubmit={handleBlogCreate}>
         <div>
-          <label>
-            title
-            <input
-              type="text"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </label>
+          <TextField
+            label="title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+            margin="dense"
+            size="small"
+          />
         </div>
         <div>
-          <label>
-            author
-            <input
-              type="text"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </label>
+          <TextField
+            label="author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+            margin="dense"
+            size="small"
+          />
         </div>
         <div>
-          <label>
-            url
-            <input
-              type="text"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </label>
+          <TextField
+            label="url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+            margin="dense"
+            size="small"
+          />
         </div>
-      </div>
-      <button type="submit">Save</button>
-    </form>
+        <Button type="submit" variant="contained" style={{ marginTop: 10 }}>
+          Save
+        </Button>
+        {/* <div>
+          <div>
+            <label>
+              title
+              <input
+                type="text"
+                value={title}
+                onChange={({ target }) => setTitle(target.value)}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              author
+              <input
+                type="text"
+                value={author}
+                onChange={({ target }) => setAuthor(target.value)}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              url
+              <input
+                type="text"
+                value={url}
+                onChange={({ target }) => setUrl(target.value)}
+              />
+            </label>
+          </div>
+        </div>
+        <button type="submit">Save</button> */}
+      </form>
+    </>
   )
 }
 

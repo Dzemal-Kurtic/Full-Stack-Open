@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link, Routes, Route, useNavigate, useMatch } from "react-router-dom"
+import { AppBar, Container, Toolbar } from "@mui/material"
+import { Button } from "@mui/material"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 import Notification from "./components/Notification"
@@ -117,13 +119,64 @@ const App = () => {
     navigate("/")
   }
 
-  const padding = {
-    padding: 5,
-  }
+  const hoverStyle = { "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }
 
   return (
-    <div>
-      <div>
+    <Container
+      maxWidth="md"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <AppBar position="static">
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <Button color="inherit" sx={hoverStyle} component={Link} to="/">
+              BLOGS
+            </Button>
+            {!user && (
+              <Button
+                color="inherit"
+                sx={hoverStyle}
+                component={Link}
+                to="/login"
+              >
+                Log in
+              </Button>
+            )}
+          </div>
+          <div>
+            {user && (
+              <>
+                <Button
+                  color="inherit"
+                  sx={hoverStyle}
+                  component={Link}
+                  to="/create"
+                >
+                  NEW BLOG
+                </Button>
+                <Button
+                  color="inherit"
+                  sx={hoverStyle}
+                  component={Link}
+                  onClick={logout}
+                >
+                  Log out
+                </Button>
+              </>
+            )}
+          </div>
+        </Toolbar>
+      </AppBar>
+      {/* <div>
         <Link style={padding} to={"/"}>
           blogs
         </Link>
@@ -138,9 +191,8 @@ const App = () => {
             <button onClick={logout}>logout</button>
           </>
         )}
-      </div>
+      </div> */}
 
-      <h1>Blogs</h1>
       <Routes>
         <Route path="/" element={<BlogList blogs={blogs} />} />
         <Route
@@ -163,7 +215,7 @@ const App = () => {
 
       <Notification message={errorMessage} type={"error"} />
       <Notification message={successMessage} type={"success"} />
-    </div>
+    </Container>
   )
 }
 

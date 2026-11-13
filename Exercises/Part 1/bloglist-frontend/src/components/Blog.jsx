@@ -1,4 +1,12 @@
 import { useState } from "react"
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Stack,
+  Link as MuiLink,
+} from "@mui/material"
 
 const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
   const [showAll, setShowALl] = useState(false)
@@ -30,30 +38,54 @@ const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
 
   if (showAll) {
     return (
-      <div style={blogStyle}>
-        <div>
-          {title}
-          <button onClick={() => setShowALl(!showAll)}>Hide</button>
-        </div>
-        <div>{author}</div>
-        <div>{url}</div>
-        <div>
-          {likes} likes
-          {loggedUser && <button onClick={handleLike}>Like</button>}
-        </div>
-        <div>{user.name}</div>
-        {loggedUser && <button onClick={handleDelete}>Remove</button>}
-        {/* <button onClick={handleDelete}>Remove</button> */}
-      </div>
+      <CardContent sx={{ mt: 2 }}>
+        <Typography gutterBottom>{title}</Typography>
+
+        <Typography gutterBottom>by {author}</Typography>
+
+        <MuiLink
+          href={url}
+          target="_blank"
+          rel="noopener"
+          display="block"
+          gutterBottom
+        >
+          {url}
+        </MuiLink>
+
+        <Typography gutterBottom>Added by {user?.name}</Typography>
+
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2 }}>
+          <Typography>{likes} likes</Typography>
+          <Button variant="outlined" onClick={handleLike}>
+            like
+          </Button>
+          <Button variant="outlined" color="error" onClick={handleDelete}>
+            remove
+          </Button>
+        </Stack>
+      </CardContent>
     )
   }
 
   return (
-    <div style={blogStyle}>
-      {title} {author}
-      <button onClick={() => setShowALl(!showAll)}>View detail</button>
-    </div>
+    <CardContent sx={{ mt: 2 }}>
+      <Typography gutterBottom>{title}</Typography>
+
+      <Typography gutterBottom>by {author}</Typography>
+
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2 }}>
+        <Button variant="outlined" onClick={() => setShowALl(!showAll)}>
+          View Detail
+        </Button>
+      </Stack>
+    </CardContent>
   )
+
+  /* <div style={blogStyle}>
+        {title} {author}
+        <button onClick={() => setShowALl(!showAll)}>View detail</button>
+      </div> */
 }
 
 export default Blog

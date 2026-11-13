@@ -12,8 +12,7 @@ import Blog from "./components/Blog"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const navigate = useNavigate()
@@ -38,16 +37,16 @@ const App = () => {
       const user = await loginService.login(loginInfo)
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
       blogService.setToken(user.token)
-      setSuccessMessage("Successfully logged in")
+      setNotification({ text: "Logged in", type: "success" })
       setUser(user)
       navigate("/")
       setTimeout(() => {
-        setSuccessMessage(null)
+        setNotification(null)
       }, 2000)
     } catch {
-      setErrorMessage("wrong credentials")
+      setNotification({ text: "wrong credentials", type: "error" })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 2000)
     }
   }
@@ -56,15 +55,15 @@ const App = () => {
     try {
       const blog = await blogService.create(blogInfo)
       setBlogs((blogs) => blogs.concat(blog))
-      setSuccessMessage(`Blog '${blog.title}' created`)
+      setNotification({ text: `Blog '${blog.title}' created`, type: "success" })
       navigate("/")
       setTimeout(() => {
-        setSuccessMessage(null)
+        setNotification(null)
       }, 2000)
     } catch {
-      setErrorMessage("can't create blog")
+      setNotification({ text: "can't create blog", type: "error" })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 2000)
     }
   }
@@ -79,14 +78,14 @@ const App = () => {
       }
       const blog = await blogService.update(id, newBlog)
       setBlogs((blogs) => blogs.map((b) => (b.id === blog.id ? blog : b)))
-      setSuccessMessage(`Blog '${blog.title}' updated`)
+      setNotification(`Blog '${blog.title}' updated`)
       setTimeout(() => {
-        setSuccessMessage(null)
+        setNotification(null)
       }, 2000)
     } catch {
-      setErrorMessage("can't update blog")
+      setNotification({ text: "can't update blog", type: "error" })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 2000)
     }
   }
@@ -95,15 +94,15 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs((blogs) => blogs.filter((b) => b.id !== id))
-      setSuccessMessage(`Blog deleted`)
+      setNotification({ text: `Blog deleted`, type: "success" })
       navigate("/")
       setTimeout(() => {
-        setSuccessMessage(null)
+        setNotification(null)
       }, 2000)
     } catch {
-      setErrorMessage("can't delete blog")
+      setNotification({ text: "Can't delete blog", type: "error" })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 2000)
     }
   }
@@ -112,9 +111,9 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogAppUser")
     setUser(null)
     blogService.setToken(null)
-    setSuccessMessage("Successfully logged out")
+    setNotification({ text: "Successfully logged out", type: "success" })
     setTimeout(() => {
-      setSuccessMessage(null)
+      setNotification(null)
     }, 1000)
     navigate("/")
   }
@@ -176,22 +175,8 @@ const App = () => {
           </div>
         </Toolbar>
       </AppBar>
-      {/* <div>
-        <Link style={padding} to={"/"}>
-          blogs
-        </Link>
-        {!user && (
-          <Link style={padding} to={"/login"}>
-            login
-          </Link>
-        )}
-        {user && (
-          <>
-            <Link to={"/create"}>create new blog</Link>
-            <button onClick={logout}>logout</button>
-          </>
-        )}
-      </div> */}
+
+      <Notification notification={notification} />
 
       <Routes>
         <Route path="/" element={<BlogList blogs={blogs} />} />
@@ -212,9 +197,6 @@ const App = () => {
           element={<BlogsForm createBlog={handleBlogCreate} />}
         />
       </Routes>
-
-      <Notification message={errorMessage} type={"error"} />
-      <Notification message={successMessage} type={"success"} />
     </Container>
   )
 }

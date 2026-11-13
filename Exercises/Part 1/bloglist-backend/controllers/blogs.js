@@ -77,6 +77,10 @@ blogsRouter.delete(
     }
 
     const user = request.user
+    if (!user) {
+      return response.status(403).json({ error: "you are not logged in" })
+    }
+
     if (blog.user?.toString() !== user.id) {
       return response
         .status(403)

@@ -8,8 +8,8 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "User",
-    "name": "User Userović",
+    "username": "Jemal",
+    "name": "Džemal",
     "password": "sekret"
 }
 
@@ -20,7 +20,8 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "Jemal",
-    "name": "Džemal",
+    "username": "User",
+    "name": "User Userović",
     "password": "sekret"
 }
+

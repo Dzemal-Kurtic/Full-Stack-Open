@@ -1,7 +1,11 @@
 import { useState } from "react"
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
+const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
   const [showAll, setShowALl] = useState(false)
+
+  if (!blog) {
+    return null
+  }
 
   let { title, author, url, likes, id, user } = blog
 
@@ -35,10 +39,11 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
         <div>{url}</div>
         <div>
           {likes} likes
-          <button onClick={handleLike}>Like</button>
+          {loggedUser && <button onClick={handleLike}>Like</button>}
         </div>
         <div>{user.name}</div>
-        <button onClick={handleDelete}>Remove</button>
+        {loggedUser && <button onClick={handleDelete}>Remove</button>}
+        {/* <button onClick={handleDelete}>Remove</button> */}
       </div>
     )
   }

@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react"
+import { Link, Routes, Route, useNavigate, useMatch } from "react-router-dom"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 import Notification from "./components/Notification"
 import BlogsForm from "./components/BlogsForm"
 import LoginForm from "./components/LoginForm"
-import Togglable from "./components/Togglable"
 import BlogList from "./components/BlogList"
+import Blog from "./components/Blog"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [user, setUser] = useState(null)
+
+  const navigate = useNavigate()
+  const match = useMatch("/blogs/:id")
+  const blog = match ? blogs.find((b) => b.id === match.params.id) : null
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -33,6 +38,7 @@ const App = () => {
       blogService.setToken(user.token)
       setSuccessMessage("Successfully logged in")
       setUser(user)
+      navigate("/")
       setTimeout(() => {
         setSuccessMessage(null)
       }, 2000)
@@ -49,6 +55,7 @@ const App = () => {
       const blog = await blogService.create(blogInfo)
       setBlogs((blogs) => blogs.concat(blog))
       setSuccessMessage(`Blog '${blog.title}' created`)
+      navigate("/")
       setTimeout(() => {
         setSuccessMessage(null)
       }, 2000)
@@ -69,7 +76,6 @@ const App = () => {
         likes,
       }
       const blog = await blogService.update(id, newBlog)
-      console.log("bloggg  ", blog)
       setBlogs((blogs) => blogs.map((b) => (b.id === blog.id ? blog : b)))
       setSuccessMessage(`Blog '${blog.title}' updated`)
       setTimeout(() => {
@@ -86,10 +92,9 @@ const App = () => {
   const handleDelete = async (id) => {
     try {
       await blogService.remove(id)
-      console.log(blogs)
       setBlogs((blogs) => blogs.filter((b) => b.id !== id))
-      console.log(blogs)
       setSuccessMessage(`Blog deleted`)
+      navigate("/")
       setTimeout(() => {
         setSuccessMessage(null)
       }, 2000)
@@ -104,52 +109,58 @@ const App = () => {
   const logout = () => {
     window.localStorage.removeItem("loggedBlogAppUser")
     setUser(null)
+    blogService.setToken(null)
     setSuccessMessage("Successfully logged out")
     setTimeout(() => {
       setSuccessMessage(null)
     }, 1000)
+    navigate("/")
   }
 
-  const loginForm = () => {
-    return (
-      <Togglable buttonLabel="login">
-        <LoginForm login={handleLogin} />
-      </Togglable>
-    )
-  }
-
-  const blogsList = () => (
-    <div>
-      <BlogList
-        blogs={blogs}
-        updateBlog={handleLike}
-        deleteBlog={handleDelete}
-      />
-    </div>
-  )
-
-  const blogsForm = () => {
-    return (
-      <Togglable buttonLabel="create new blog">
-        <BlogsForm createBlog={handleBlogCreate} />
-      </Togglable>
-    )
+  const padding = {
+    padding: 5,
   }
 
   return (
     <div>
-      <h1>Blogs</h1>
-      {!user && <div>{loginForm()}</div>}
-      {user && (
-        <div>
-          <p>{user.name} logged in</p>
-          <p>
+      <div>
+        <Link style={padding} to={"/"}>
+          blogs
+        </Link>
+        {!user && (
+          <Link style={padding} to={"/login"}>
+            login
+          </Link>
+        )}
+        {user && (
+          <>
+            <Link to={"/create"}>create new blog</Link>
             <button onClick={logout}>logout</button>
-          </p>
-          {blogsForm()}
-          {blogsList()}
-        </div>
-      )}
+          </>
+        )}
+      </div>
+
+      <h1>Blogs</h1>
+      <Routes>
+        <Route path="/" element={<BlogList blogs={blogs} />} />
+        <Route
+          path="/blogs/:id"
+          element={
+            <Blog
+              blog={blog}
+              loggedUser={user}
+              updateBlog={handleLike}
+              deleteBlog={handleDelete}
+            />
+          }
+        />
+        <Route path="/login" element={<LoginForm login={handleLogin} />} />
+        <Route
+          path="/create"
+          element={<BlogsForm createBlog={handleBlogCreate} />}
+        />
+      </Routes>
+
       <Notification message={errorMessage} type={"error"} />
       <Notification message={successMessage} type={"success"} />
     </div>

@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react"
 import { Routes, Route, Link, useMatch } from "react-router-dom"
+import { Container, AppBar, Toolbar, Button } from "@mui/material"
 import noteService from "./services/notes"
 import Home from "./components/Home"
 import Footer from "./components/Footer"
 import NoteForm from "./components/NoteForm"
 import NoteList from "./components/NoteList"
 import Note from "./components/Note"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [notes, setNotes] = useState([])
+  const [notification, setNotification] = useState(null)
 
   const match = useMatch("/notes/:id")
   const note = match ? notes.find((note) => note.id === match.params.id) : null
@@ -22,6 +25,13 @@ const App = () => {
   const addNote = (noteObject) => {
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote))
+      setNotification({
+        text: `Note '${returnedNote.content}' added!`,
+        type: "success",
+      })
+      setTimeout(() => {
+        setNotification(null)
+      }, 3000)
     })
   }
 
@@ -41,39 +51,44 @@ const App = () => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
       })
       .catch(() => {
-        /*
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
+        setNotification({
+          text: `Note '${note.content}' was already removed from server`,
+          type: "error",
+        })
         setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        */
+          setNotification(null)
+        }, 2000)
+
+        setNotes(notes.filter((n) => n.id !== id))
         setNotes(notes.filter((n) => n.id !== id))
       })
   }
-
-  const padding = {
-    padding: 5,
-  }
+  const hoverStyle = { "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }
 
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">
-          home
-        </Link>
-        <Link style={padding} to="/notes">
-          notes
-        </Link>
-        <Link style={padding} to="/create">
-          new note
-        </Link>
-      </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/" sx={hoverStyle}>
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes" sx={hoverStyle}>
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/create" sx={hoverStyle}>
+            new note
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Notification notification={notification} />
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/notes" element={<NoteList notes={notes} />} />
+        <Route
+          path="/notes"
+          element={<NoteList notes={notes} setNotification={setNotification} />}
+        />
         <Route
           path="/notes/:id"
           element={
@@ -87,7 +102,7 @@ const App = () => {
         <Route path="/create" element={<NoteForm createNote={addNote} />} />
       </Routes>
       <Footer />
-    </div>
+    </Container>
   )
 }
 

@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-
-//import Note from "./Note"
-import Notification from "./Notification"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material"
 import LoginForm from "./LoginForm"
 import Togglable from "./Togglable"
 import loginService from "../services/login"
 import noteService from "../services/notes"
 
-const NoteList = ({ notes }) => {
-  const [showAll, setShowAll] = useState(true)
+const NoteList = ({ notes, setNotification }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -36,10 +40,10 @@ const NoteList = ({ notes }) => {
       setUsername("")
       setPassword("")
     } catch {
-      setErrorMessage("wrong credentials")
+      setNotification({ text: "wrong credentials", type: "error" })
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 2000)
+        setNotification(null)
+      }, 5000)
     }
   }
 
@@ -57,16 +61,11 @@ const NoteList = ({ notes }) => {
     )
   }
 
-  const notesToShow = showAll
-    ? notes
-    : notes.filter((note) => {
-        return note.important
-      })
-
   return (
     <div>
+      {!user && loginForm()}
       <h1>Notes</h1>
-      <Notification message={errorMessage} />
+      {/* <Notification message={errorMessage} />
 
       {!user && loginForm()}
 
@@ -86,7 +85,30 @@ const NoteList = ({ notes }) => {
             <Link to={`/notes/${note.id}`}>{note.content}</Link>
           </li>
         ))}
-      </ul>
+      </ul> */}
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>content</TableCell>
+              <TableCell>user</TableCell>
+              <TableCell>important</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {notes.map((note) => (
+              <TableRow key={note.id}>
+                <TableCell>
+                  <Link to={`/notes/${note.id}`}>{note.content}</Link>
+                </TableCell>
+                <TableCell>{note.user.name}</TableCell>
+                <TableCell>{note.important ? "yes" : ""}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

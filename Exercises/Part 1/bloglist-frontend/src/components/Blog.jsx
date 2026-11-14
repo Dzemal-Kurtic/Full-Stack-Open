@@ -17,16 +17,6 @@ const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
 
   let { title, author, url, likes, id, user } = blog
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 5,
-    paddingBottom: 10,
-    border: "solid",
-    borderWidth: 2,
-    marginTop: 5,
-    marginBottom: 5,
-  }
-
   const handleLike = () => {
     likes = likes + 1
     updateBlog({ title, author, url, likes, id })
@@ -57,12 +47,17 @@ const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
 
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2 }}>
           <Typography>{likes} likes</Typography>
-          <Button variant="outlined" onClick={handleLike}>
-            like
-          </Button>
-          <Button variant="outlined" color="error" onClick={handleDelete}>
-            remove
-          </Button>
+          {loggedUser && (
+            <>
+              {" "}
+              <Button variant="outlined" onClick={handleLike}>
+                like
+              </Button>
+              <Button variant="outlined" color="error" onClick={handleDelete}>
+                remove
+              </Button>
+            </>
+          )}
         </Stack>
       </CardContent>
     )
@@ -81,11 +76,6 @@ const Blog = ({ loggedUser, blog, updateBlog, deleteBlog }) => {
       </Stack>
     </CardContent>
   )
-
-  /* <div style={blogStyle}>
-        {title} {author}
-        <button onClick={() => setShowALl(!showAll)}>View detail</button>
-      </div> */
 }
 
 export default Blog

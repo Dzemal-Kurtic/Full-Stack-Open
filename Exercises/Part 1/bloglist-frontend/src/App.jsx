@@ -4,9 +4,11 @@ import { AppBar, Container, Toolbar } from "@mui/material"
 import { Button } from "@mui/material"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
+import signupService from "./services/signup"
 import Notification from "./components/Notification"
 import BlogsForm from "./components/BlogsForm"
 import LoginForm from "./components/LoginForm"
+import SignupForm from "./components/SignupForm"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
 
@@ -31,6 +33,26 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const handleSignup = async (credentials) => {
+    try {
+      const user = await signupService.signup(credentials)
+      if (user) {
+        setNotification({
+          text: `You signed up successfully. Please log into your account`,
+        })
+        navigate("/")
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
+      }
+    } catch {
+      setNotification({ text: "wrong credentials", type: "error" })
+      setTimeout(() => {
+        setNotification(null)
+      }, 2000)
+    }
+  }
 
   const handleLogin = async (loginInfo) => {
     try {
@@ -61,7 +83,7 @@ const App = () => {
         setNotification(null)
       }, 2000)
     } catch {
-      setNotification({ text: "can't create blog", type: "error" })
+      setNotification({ text: "Can't create blog", type: "error" })
       setTimeout(() => {
         setNotification(null)
       }, 2000)
@@ -83,7 +105,7 @@ const App = () => {
         setNotification(null)
       }, 2000)
     } catch {
-      setNotification({ text: "can't update blog", type: "error" })
+      setNotification({ text: "Can't update blog", type: "error" })
       setTimeout(() => {
         setNotification(null)
       }, 2000)
@@ -140,7 +162,9 @@ const App = () => {
             <Button color="inherit" sx={hoverStyle} component={Link} to="/">
               BLOGS
             </Button>
-            {!user && (
+          </div>
+          {!user && (
+            <div>
               <Button
                 color="inherit"
                 sx={hoverStyle}
@@ -149,30 +173,37 @@ const App = () => {
               >
                 Log in
               </Button>
-            )}
-          </div>
-          <div>
-            {user && (
-              <>
-                <Button
-                  color="inherit"
-                  sx={hoverStyle}
-                  component={Link}
-                  to="/create"
-                >
-                  NEW BLOG
-                </Button>
-                <Button
-                  color="inherit"
-                  sx={hoverStyle}
-                  component={Link}
-                  onClick={logout}
-                >
-                  Log out
-                </Button>
-              </>
-            )}
-          </div>
+              <Button
+                color="inherit"
+                sx={hoverStyle}
+                component={Link}
+                to="/signup"
+              >
+                Sign up
+              </Button>
+            </div>
+          )}
+
+          {user && (
+            <div>
+              <Button
+                color="inherit"
+                sx={hoverStyle}
+                component={Link}
+                to="/create"
+              >
+                NEW BLOG
+              </Button>
+              <Button
+                color="inherit"
+                sx={hoverStyle}
+                component={Link}
+                onClick={logout}
+              >
+                Log out
+              </Button>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
 
@@ -191,6 +222,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/signup" element={<SignupForm signup={handleSignup} />} />
         <Route path="/login" element={<LoginForm login={handleLogin} />} />
         <Route
           path="/create"

@@ -1,8 +1,8 @@
-interface Result {
+export interface Result {
   periodLength: number;
   trainingDays: number;
   target: number;
-  calculatedAverage: number;
+  average: number;
   success: boolean;
   rating: Rating;
   ratingDescription: string;
@@ -10,8 +10,8 @@ interface Result {
 
 type Rating = 1 | 2 | 3;
 
-interface ParsedArguments {
-  hours: number[];
+export interface ParsedArguments {
+  daily_exercises: number[];
   target: number;
 }
 
@@ -19,19 +19,19 @@ const parseArguments = (args: string[]): ParsedArguments => {
   if (args.length < 4) throw new Error("Not enough arguments");
 
   const target: number = Number(args[2]);
-  const hours: number[] = args.slice(3).map((hour) => Number(hour));
+  const daily_exercises: number[] = args.slice(3).map((hour) => Number(hour));
 
-  if (isNaN(target) || hours.some((hour) => isNaN(hour))) {
+  if (isNaN(target) || daily_exercises.some((hour) => isNaN(hour))) {
     throw new Error("Provided values were not numbers");
   }
 
   return {
-    hours,
+    daily_exercises,
     target,
   };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   dailyHours: number[],
   targetHours: number,
 ): Result => {
@@ -57,20 +57,22 @@ const calculateExercises = (
     periodLength: dailyHours.length,
     trainingDays: activeDays,
     target: targetHours,
-    calculatedAverage: average,
+    average: average,
     success: average >= targetHours,
     rating: rating,
     ratingDescription: resultDescription,
   };
 };
 
-try {
-  const { hours, target } = parseArguments(process.argv);
-  console.log(calculateExercises(hours, target));
-} catch (error) {
-  let errorMessage = "Something went wrong.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (process.argv[1] === import.meta.filename) {
+  try {
+    const { daily_exercises, target } = parseArguments(process.argv);
+    console.log(calculateExercises(daily_exercises, target));
+  } catch (error) {
+    let errorMessage = "Something went wrong.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }

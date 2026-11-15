@@ -9,14 +9,17 @@
     "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
+    "lint": "eslint .",
     "calculateBmi": "tsc && node bmiCalculator.ts",
     "calculateExercises": "tsc && node exerciseCalculator.ts"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.6",
     "concurrently": "^10.0.7",
-    "typescript": "^7.0.2"
+    "typescript": "~6.0",
+    "typescript-eslint": "^8.72.2"
   },
   "dependencies": {
     "express": "^5.3.0"

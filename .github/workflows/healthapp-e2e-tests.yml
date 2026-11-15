@@ -3,6 +3,9 @@ name: Health app E2E Tests
 on:
   push:
     branches: [main, master]
+    paths:
+      - "Exercises/TypeScript/healthapp/**"
+      - "Exercises/TypeScript/healthapp-tests/**"
 
 jobs:
   test:
@@ -16,6 +19,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "24"
+        cache-dependency-path: Exercises/TypeScript/healthapp/package-lock.json
 
       - name: Install healthapp dependencies
         working-directory: ./healthapp

@@ -6,6 +6,8 @@ on:
     paths:
       - "Exercises/TypeScript/healthapp/**"
       - "Exercises/TypeScript/healthapp-tests/**"
+      - ".github/workflows/healthapp-e2e-tests.yml"
+  workflow_dispatch:
 
 jobs:
   test:

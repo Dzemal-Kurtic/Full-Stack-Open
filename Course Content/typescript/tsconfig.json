@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmit": true,
+    "types": ["node"]
+  }
+}

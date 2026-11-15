@@ -100,10 +100,10 @@ const App = () => {
       }
       const blog = await blogService.update(id, newBlog)
       setBlogs((blogs) => blogs.map((b) => (b.id === blog.id ? blog : b)))
-      setNotification(`Blog '${blog.title}' updated`)
+      setNotification({ text: `Like added`, type: "success" })
       setTimeout(() => {
         setNotification(null)
-      }, 2000)
+      }, 1000)
     } catch {
       setNotification({ text: "Can't update blog", type: "error" })
       setTimeout(() => {
@@ -207,8 +207,6 @@ const App = () => {
         </Toolbar>
       </AppBar>
 
-      <Notification notification={notification} />
-
       <Routes>
         <Route path="/" element={<BlogList blogs={blogs} />} />
         <Route
@@ -229,6 +227,7 @@ const App = () => {
           element={<BlogsForm createBlog={handleBlogCreate} />}
         />
       </Routes>
+      <Notification notification={notification} />
     </Container>
   )
 }

@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.ts",
+    "dev": "concurrently \"tsc --watch\" \"node --watch index.ts\"",
+    "lint": "eslint .",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.6",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.15.0",
+    "typescript": "~6.0",
+    "typescript-eslint": "^8.73.0"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
